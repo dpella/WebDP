@@ -6,7 +6,8 @@ info:
   version: 1.0.0
   title: "WebDP: An open API for Differential Privacy systems"
   license:
-    name: MIT
+    name: Apache 2.0
+    identifier: Apache-2.0
   description: |
     Welcome to the official OpenAPI documentation for WebDP, our versatile API designed to provide transparent interoperability with a range of differentially private frameworks.
 

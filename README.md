@@ -111,7 +111,7 @@ framework primitives.
 
 As a starting point for these tasks, this project provides two scripts for the
 generation of WebDP's [client](/scripts/generate-client-stub-python.sh) and
-[server](/scripts/generate-client-server-python.sh) stubs as Python libraries.
+[server](/scripts/generate-server-stub-python.sh) stubs as Python libraries.
 These serve as an entry point for DP implementors looking to develop the WebDP
 connector of their choice.
 
