@@ -12,7 +12,7 @@ through a WebDP server.
 
 ## Shortcuts
 
-* [API specification version 1.0.0](/api/WebDP-1.0.0.yml)
+* [API specification version 1.0.0](https://editor.swagger.io/?url=https://webdp.dev/api/WebDP-1.0.0.yml)
 * [A walkthrough over WebDP](/demo/webdp_demo.ipynb) (an interactive Jypyter
   notebook with simple examples of use to get started)
 
@@ -96,13 +96,14 @@ Obtaining a result like it follows:
 # Proof of Concept
 
 With the API design in place, developers can rely on open-source tools like
-OpenAPI Generator to automatically generate client and server code that
-implements the communication protocol defined in the WebDP API, making it easy
-for both DP users and implementors to join the project’s proposed ecosystem. In
-this fashion, DP users can easily start using any WebDP-compliant server to
-execute differentially private queries using either an automatically generated
-client in their programming language of choice, or by encoding requests directly
-using the familiar JSON format.
+[OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) to
+automatically generate client and server code that implements the communication
+protocol defined in the WebDP API, making it easy for both DP users and
+implementors to join the project’s proposed ecosystem. In this fashion, DP
+users can easily start using any WebDP-compliant server to execute
+differentially private queries using either an automatically generated client
+in their programming language of choice, or by encoding requests directly using
+the familiar JSON format.
 
 On the other hand, DP implementors can develop WebDP-compliant servers by
 automatically generating a server stub for the programming language of their
@@ -119,8 +120,7 @@ connector of their choice.
 WebDP relies on the collaborative efforts of our community, and we
 enthusiastically invite you to join us in shaping its development! Should you
 wish to get involved, don't hesitate to reach out to us at
-[webdp@dpella.io](mailto:webdp@dpella.io) or on [our
-website](https://dpella.io)](https://dpella.io).
+[webdp@dpella.io](mailto:webdp@dpella.io) or on [our website](https://dpella.io).
 
 ## Bug Reports
 Found a bug or have a feature request? Please open an issue
@@ -131,4 +131,5 @@ This project was founded by the [TERMINET
 consortium](https://terminet-h2020.eu/).
 
 # License
-Distributed under the MIT License. See LICENSE.txt for more information.
+Distributed under the Apache License Version 2.0. See LICENSE.txt for more
+information.
