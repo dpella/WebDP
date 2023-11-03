@@ -1,0 +1,1112 @@
+openapi: "3.0.0"
+
+# -----------------------------------
+
+info:
+  version: 1.0.0
+  title: "WebDP: An open API for Differential Privacy systems"
+  license:
+    name: MIT
+  description: |
+    Welcome to the official OpenAPI documentation for WebDP, our versatile API designed to provide transparent interoperability with a range of differentially private frameworks.
+
+# -----------------------------------
+
+servers:
+  - url: http://localhost:8080/v1 # Local test server
+
+# -----------------------------------
+
+security:
+  - BearerTokenAuth: [] # Throughout the API
+
+# -----------------------------------
+
+paths:
+
+  # Login/logout
+  /login:
+    post:
+      summary: Login using user/password credentials
+      operationId: login
+      tags: [Login]
+      security: [] # No JWT required to login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  $ref: "#/components/schemas/UserHandle"
+                password:
+                  $ref: "#/components/schemas/UserPassword"
+      responses:
+        200: # OK
+          description: Login succeded
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - jwt
+                properties:
+                  jwt:
+                    type: string
+                    format: jwt
+                    example: "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQ3VyYXRvciIsIklzc3 ..."
+        401: # Unauthorized
+          description: Unauthorized
+
+  /logout:
+    post:
+      summary: Logout from the current session
+      operationId: logout
+      tags: [Login]
+      responses:
+        204: # No content
+          description: Logout succeded
+        default:
+          $ref: "#/components/responses/Error"
+
+  # User management
+  /users:
+    get:
+      summary: List all users
+      operationId: getUsers
+      tags: [User]
+      responses:
+        200: # OK
+          description: A list of all existing user handles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        default:
+          $ref: "#/components/responses/Error"
+
+    post:
+      summary: Create a new user
+      operationId: createUser
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - handle
+                - name
+                - password
+                - roles
+              properties:
+                handle:
+                  $ref: "#/components/schemas/UserHandle"
+                name:
+                  $ref: "#/components/schemas/UserName"
+                password:
+                  $ref: "#/components/schemas/UserPassword"
+                roles:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Role"
+      responses:
+        201: # Created
+          description: User created
+        default:
+          $ref: "#/components/responses/Error"
+
+  /user/{userHandle}:
+    parameters:
+      - name: userHandle
+        description: The handle of the user to retrieve
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserHandle"
+
+    get:
+      summary: Get user information
+      operationId: getUser
+      tags: [User]
+      responses:
+        200: # OK
+          description: The information of a user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        default:
+          $ref: "#/components/responses/Error"
+
+    patch:
+      summary: Update an existing user
+      operationId: updateUser
+      tags: [User]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              minProperties: 1
+              properties:
+                name:
+                  $ref: "#/components/schemas/UserName"
+                password:
+                  $ref: "#/components/schemas/UserPassword"
+                roles:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Role"
+      responses:
+        204: # No content
+          description: User updated
+        default:
+          $ref: "#/components/responses/Error"
+
+    delete:
+      summary: Delete an existing user
+      operationId: deleteUser
+      tags: [User]
+      responses:
+        204: # No content
+          description: User deleted
+        default:
+          $ref: "#/components/responses/Error"
+
+  # Datasets management
+  /datasets:
+    get:
+      summary: List all the datasets visible to the requester
+      operationId: getDatasets
+      tags: [Dataset]
+      responses:
+        200: # OK
+          description: The dataset information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DatasetInfo"
+        default:
+          $ref: "#/components/responses/Error"
+
+    post:
+      summary: Create a new dataset
+      operationId: createDataset
+      tags: [Dataset]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - owner
+                - schema
+                - privacy_notion
+                - total_budget
+              properties:
+                name:
+                  $ref: "#/components/schemas/DatasetName"
+                owner:
+                  $ref: "#/components/schemas/UserHandle"
+                schema:
+                  $ref: "#/components/schemas/TableSchema"
+                privacy_notion:
+                  $ref: "#/components/schemas/PrivacyNotion"
+                total_budget:
+                  $ref: "#/components/schemas/Budget"
+      responses:
+        201: # OK
+          description: Dataset created
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    $ref: "#/components/schemas/DatasetId"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /dataset/{datasetId}:
+    parameters:
+      - name: datasetId
+        description: The dataset unique identifier
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/DatasetId"
+
+    get:
+      summary: Get dataset information
+      operationId: getDataset
+      tags: [Dataset]
+      responses:
+        200: # OK
+          description: The information of a dataset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatasetInfo"
+        default:
+          $ref: "#/components/responses/Error"
+
+    patch:
+      summary: Update an existing dataset
+      operationId: updateDataset
+      tags: [Dataset]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              minProperties: 1
+              properties:
+                name:
+                  $ref: "#/components/schemas/DatasetName"
+                owner:
+                  $ref: "#/components/schemas/UserHandle"
+                total_budget:
+                  $ref: "#/components/schemas/Budget"
+      responses:
+        204: # No content
+          description: Dataset updated
+        default:
+          $ref: "#/components/responses/Error"
+
+    delete:
+      summary: Delete an existing dataset
+      operationId: deleteDataset
+      tags: [Dataset]
+      responses:
+        204: # No content
+          description: Dataset deleted
+        default:
+          $ref: "#/components/responses/Error"
+
+  /dataset/{datasetId}/upload:
+    parameters:
+      - name: datasetId
+        description: The dataset unique identifier
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/DatasetId"
+
+    post:
+      summary: Upload dataset data
+      operationId: uploadDataset
+      tags: [Dataset]
+      requestBody:
+        required: true
+        content:
+          text/csv:
+            schema:
+              type: string
+      responses:
+        204: # No content
+          description: Dataset uploaded
+        default:
+          $ref: "#/components/responses/Error"
+
+  # Budget management
+  /budget/user/{userHandle}:
+    parameters:
+      - name: userHandle
+        description: The user handle
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserHandle"
+
+    get:
+      operationId: getUserBudgetAllocation
+      summary: Get the user budget allocation across datasets
+      tags: [Budget]
+      responses:
+        200: # OK
+          description: An array with the budget allocated to each dataset
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserBudgetAllocation"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /budget/dataset/{datasetId}:
+    parameters:
+      - name: datasetId
+        description: The dataset unique identifier
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/DatasetId"
+
+    get:
+      operationId: getDatasetBudgetAllocation
+      summary: Get the dataset budget allocation accross users
+      tags: [Budget]
+      responses:
+        200: # OK
+          description: The budget allocation of a given dataset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatasetBudgetAllocation"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /budget/allocation/{userHandle}/{datasetId}:
+    parameters:
+      - name: userHandle
+        description: The user handle
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UserHandle"
+      - name: datasetId
+        description: The dataset unique identifier
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/DatasetId"
+
+    get:
+      operationId: getUserDatasetBudget
+      summary: Get the budget allocated to a user on a given dataset
+      tags: [Budget]
+      responses:
+        200: # OK
+          description: An array with the budget allocated ot each dataset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Budget"
+        default:
+          $ref: "#/components/responses/Error"
+
+    post:
+      operationId: allocateUserDatasetBudget
+      summary: Allocate some budget to a user for a given dataset
+      tags: [Budget]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Budget"
+      responses:
+        204: # No content
+          description: Dataset uploaded
+        default:
+          $ref: "#/components/responses/Error"
+
+    patch:
+      operationId: updateUserDatasetBudget
+      summary: Update the budget alocated to a user for a given dataset
+      tags: [Budget]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Budget"
+      responses:
+        204: # No content
+          description: Dataset uploaded
+        default:
+          $ref: "#/components/responses/Error"
+
+    delete:
+      operationId: deleteUserDatasetBudget
+      summary: Dealocate the budget assigned to a user for a given dataset
+      tags: [Budget]
+      responses:
+        204: # No content
+          description: Dataset deleted
+        default:
+          $ref: "#/components/responses/Error"
+
+  # Queries
+  /query/evaluate:
+    post:
+      operationId: queryEvaluate
+      summary: Evaluate a differential privacy query over a dataset
+      tags: [Query]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataset
+                - budget
+                - query
+              properties:
+                dataset:
+                  $ref: "#/components/schemas/DatasetId"
+                budget:
+                  $ref: "#/components/schemas/Budget"
+                query:
+                  $ref: "#/components/schemas/Query"
+      responses:
+        200: # OK
+          description: Query result
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - rows
+                properties:
+                  rows:
+                    type: array
+                    items:
+                      type: object
+        default:
+          $ref: "#/components/responses/Error"
+
+  /query/accuracy:
+    post:
+      operationId: queryAccuracy
+      summary: Compute the accuracy a differential privacy query over a dataset
+      tags: [Query]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataset
+                - budget
+                - query
+                - confidence
+              properties:
+                dataset:
+                  $ref: "#/components/schemas/DatasetId"
+                budget:
+                  $ref: "#/components/schemas/Budget"
+                query:
+                  $ref: "#/components/schemas/Query"
+                confidence:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+      responses:
+        200: # OK
+          description: Query result
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accuracy
+                  - schema
+                properties:
+                  accuracy:
+                    type: array
+                    items:
+                      type: number
+                  schema:
+                    $ref: "#/components/schemas/TableSchema"
+        default:
+          $ref: "#/components/responses/Error"
+
+  /query/custom:
+    post:
+      operationId: queryCustom
+      summary: Evaluate a custom differential privacy query over a dataset
+      tags: [Query]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - dataset
+                - budget
+                - query
+              properties:
+                dataset:
+                  $ref: "#/components/schemas/DatasetId"
+                budget:
+                  $ref: "#/components/schemas/Budget"
+                query:
+                  type: string # Input format is up to the framework
+      responses:
+        200: # OK
+          description: Query result
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - rows
+                properties:
+                  rows:
+                    type: array
+                    items:
+                      type: object
+        default:
+          $ref: "#/components/responses/Error"
+
+# -----------------------------------
+
+# Reusable components
+components:
+  # Responses
+  responses:
+    Error:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorMessage"
+
+  # Schemas
+  schemas:
+
+    User:
+      description: The information of a user
+      type: object
+      required:
+        - handle
+        - name
+        - roles
+        - created_time
+        - updated_time
+      properties:
+        handle:
+          $ref: "#/components/schemas/UserHandle"
+        name:
+          $ref: "#/components/schemas/UserName"
+        roles:
+          type: array
+          items:
+            $ref: "#/components/schemas/Role"
+        created_time:
+          $ref: "#/components/schemas/Timestamp"
+        updated_time:
+          $ref: "#/components/schemas/Timestamp"
+
+    UserHandle:
+      description: A user handle
+      type: string
+      example: "john123"
+
+    UserName:
+      description: A user full name
+      type: string
+      example: "John Doe"
+
+    UserPassword:
+      description: A plain-text password
+      type: string
+      format: password
+      example: "hunter2"
+
+    Role:
+      description: A user role in the DP framework
+      type: string
+      enum:
+        - 'Admin'
+        - 'Curator'
+        - 'Analyst'
+
+    PrivacyNotion:
+      description: The privacy notion of a dataset
+      type: string
+      enum:
+        - 'PureDP'
+        - 'ApproxDP'
+
+    NoiseMechanism:
+      description: A differential privacy noise mechanism
+      type: string
+      enum:
+        - 'Gauss'
+        - 'Laplace'
+
+    Budget:
+      description: A privacy budget
+      oneOf:
+        - $ref: "#/components/schemas/PureDPBudget"
+        - $ref: "#/components/schemas/ApproxDPBudget"
+      example: { epsilon: 1, delta: 0.01 }
+
+    PureDPBudget:
+      description: A pure-DP privacy budget
+      type: object
+      required:
+        - epsilon
+      properties:
+        epsilon:
+          type: number
+          format: double
+          example: 0.1
+      additionalProperties: false
+
+    ApproxDPBudget:
+      description: An approximated-DP privacy budget
+      type: object
+      required:
+        - epsilon
+        - delta
+      properties:
+        epsilon:
+          type: number
+          format: double
+          example: 0.1
+        delta:
+          type: number
+          format: double
+          example: 0.001
+      additionalProperties: false
+
+    DatasetBudgetAllocation:
+      description: The budget allocation of a dataset across users
+      type: object
+      required:
+        - total
+        - allocated
+        - consumed
+        - allocation
+      properties:
+        total:
+          $ref: "#/components/schemas/Budget"
+        allocated:
+          $ref: "#/components/schemas/Budget"
+        consumed:
+          $ref: "#/components/schemas/Budget"
+        allocation:
+          type: array
+          items:
+            $ref: "#/components/schemas/DatasetBudgetAllocationEntry"
+
+    DatasetBudgetAllocationEntry:
+      description: An user entry in the budget allocation of a dataset
+      type: object
+      required:
+        - user
+        - allocated
+        - consumed
+      properties:
+        user:
+          $ref: "#/components/schemas/UserHandle"
+        allocated:
+          $ref: "#/components/schemas/Budget"
+        consumed:
+          $ref: "#/components/schemas/Budget"
+      example:
+        [ { user: "foo", allocated: { epsilon: 1 }, consumed: { epsilon: 0.5 } }, { user: "bar", allocated: { epsilon: 0.4 }, consumed: { epsilon: 0.2 } } ]
+
+    UserBudgetAllocation:
+      description: The budget allocation of a user across datasets
+      type: object
+      required:
+        - dataset
+        - allocated
+        - consumed
+      properties:
+        dataset:
+          $ref: "#/components/schemas/DatasetId"
+        allocated:
+          $ref: "#/components/schemas/Budget"
+        consumed:
+          $ref: "#/components/schemas/Budget"
+
+    DataType:
+      description: The type of a dataset value
+      oneOf:
+        - $ref: "#/components/schemas/BoolType"
+        - $ref: "#/components/schemas/IntType"
+        - $ref: "#/components/schemas/DoubleType"
+        - $ref: "#/components/schemas/TextType"
+        - $ref: "#/components/schemas/EnumType"
+      discriminator:
+        propertyName: name
+        mapping:
+          Bool: "#/components/schemas/BoolType"
+          Int: "#/components/schemas/IntType"
+          Double: "#/components/schemas/DoubleType"
+          Text: "#/components/schemas/TextType"
+          Enum: "#/components/schemas/EnumType"
+
+    BoolType:
+      description: The type of a boolean value
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          enum: [Bool]
+      additionalProperties: false
+
+    IntType:
+      description: The type of an integer value
+      type: object
+      required:
+        - name
+        - low
+        - high
+      properties:
+        name:
+          type: string
+          enum: [Int]
+        low:
+          type: integer
+          example: 0
+        high:
+          type: integer
+          example: 100
+      additionalProperties: false
+
+    DoubleType:
+      description: The type of an floating point value
+      type: object
+      required:
+        - name
+        - low
+        - high
+      properties:
+        name:
+          type: string
+          enum: [Double]
+        low:
+          type: integer
+          example: 0.0
+        high:
+          type: integer
+          example: 50.0
+      additionalProperties: false
+
+    TextType:
+      description: The type of a string value
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          enum: [Text]
+      additionalProperties: false
+
+    EnumType:
+      description: The type of an enumeration value
+      type: object
+      required:
+        - name
+        - labels
+      properties:
+        name:
+          type: string
+          enum: [Enum]
+        labels:
+          type: array
+          items:
+            type: string
+          example: ["foo", "bar", "baz"]
+      additionalProperties: false
+
+    DatasetInfo:
+      description: The information of a dataset
+      type: object
+      required:
+        - id
+        - name
+        - owner
+        - schema
+        - privacy_notion
+        - total_budget
+        - loaded
+        - created_time
+        - updated_time
+        - loaded_time
+      properties:
+        id:
+          $ref: "#/components/schemas/DatasetId"
+        name:
+          $ref: "#/components/schemas/DatasetName"
+        owner:
+          $ref: "#/components/schemas/UserHandle"
+        schema:
+          $ref: "#/components/schemas/TableSchema"
+        privacy_notion:
+          $ref: "#/components/schemas/PrivacyNotion"
+        total_budget:
+          $ref: "#/components/schemas/Budget"
+        loaded:
+          type: boolean
+        created_time:
+          $ref: "#/components/schemas/Timestamp"
+        updated_time:
+          $ref: "#/components/schemas/Timestamp"
+        loaded_time:
+          $ref: "#/components/schemas/Timestamp"
+
+    DatasetId:
+      description: The unique identifier of a dataset
+      type: integer
+      minimum: 0
+      example: 123456789
+
+    DatasetName:
+      description: The name of the dataset
+      type: string
+      example: "salaries"
+
+    TableSchema:
+      description: The data schema of a table
+      type: array
+      items:
+        $ref: "#/components/schemas/ColumnSchema"
+      example:
+        [
+          { "name": "foo", "type": { "name": "Int", "low": 10, "high": 20 } },
+          { "name": "bar", "type": { "name": "Enum", "labels": ["A", "B", "C"] } }
+        ]
+
+    ColumnSchema:
+      description: The data schema of a column
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          $ref: "#/components/schemas/DataType"
+
+    Query:
+      description: A differentially private query
+      type: array
+      items:
+        $ref: "#/components/schemas/QueryStep"
+
+    QueryStep:
+      description: A step in a differentially private query
+      oneOf:
+        - $ref: "#/components/schemas/SelectTransformation"
+        - $ref: "#/components/schemas/RenameTransformation"
+        - $ref: "#/components/schemas/FilterTransformation"
+        - $ref: "#/components/schemas/MapTransformation"
+        - $ref: "#/components/schemas/BinTransformation"
+        - $ref: "#/components/schemas/CountMeasurement"
+        - $ref: "#/components/schemas/MinMeasurement"
+        - $ref: "#/components/schemas/MaxMeasurement"
+        - $ref: "#/components/schemas/SumMeasurement"
+        - $ref: "#/components/schemas/MeanMeasurement"
+        - $ref: "#/components/schemas/GroupByPartition"
+
+    SelectTransformation:
+      description: A projection of the dataset columns
+      type: object
+      required:
+        - select
+      properties:
+        select:
+          type: array
+          items:
+            type: string
+          example: ["foo", "bar"]
+      additionalProperties: false
+
+    RenameTransformation:
+      description: A renaming of the dataset columns
+      type: object
+      required:
+        - rename
+      properties:
+        rename:
+          type: object
+          additionalProperties:
+            type: string
+          example: { "foo": "newFoo", "bar": "newBar" }
+      additionalProperties: false
+
+    FilterTransformation:
+      description: A filter of the dataset rows
+      type: object
+      required:
+        - filter
+      properties:
+        filter:
+          type: array
+          items:
+            type: string
+          example: ["foo >= 5", "bar <> 10"]
+      additionalProperties: false
+
+    MapTransformation:
+      description: A function mapping over the dataset columns
+      type: object
+      required:
+        - map
+      properties:
+        map:
+          $ref: "#/components/schemas/ColumnMapping"
+      additionalProperties: false
+
+    ColumnMapping:
+      type: object
+      required:
+        - fun
+        - schema
+      properties:
+        fun:
+          type: string
+        schema:
+          type: array
+          items:
+            $ref: "#/components/schemas/ColumnSchema"
+      additionalProperties: false
+      example: { "fun": "{'baz': foo + bar}", "schema": [ {"name": "baz", "type": {"name": "Int", "low": 20, "high": 30 } } ] }
+
+    BinTransformation:
+      description: Mapping values to predefined bins
+      type: object
+      required:
+        - bin
+      properties:
+        bin:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/Value"
+          example: { "foo": [10, 20, 30], "bar": [12.5, 25.0] }
+      additionalProperties: false
+
+    CountMeasurement:
+      description: Differentially private count
+      type: object
+      required:
+        - count
+      properties:
+        count:
+          $ref: "#/components/schemas/MeasurementParams"
+      additionalProperties: false
+
+    MinMeasurement:
+      description: Differentially private minimum
+      type: object
+      required:
+        - min
+      properties:
+        min:
+          $ref: "#/components/schemas/MeasurementParams"
+      additionalProperties: false
+
+    MaxMeasurement:
+      description: Differentially private maximum
+      type: object
+      required:
+        - max
+      properties:
+        max:
+          $ref: "#/components/schemas/MeasurementParams"
+      additionalProperties: false
+
+    SumMeasurement:
+      description: Differentially private sum
+      type: object
+      required:
+        - sum
+      properties:
+        sum:
+          $ref: "#/components/schemas/MeasurementParams"
+      additionalProperties: false
+
+    MeanMeasurement:
+      description: Differentially private mean
+      type: object
+      required:
+        - mean
+      properties:
+        mean:
+          $ref: "#/components/schemas/MeasurementParams"
+      additionalProperties: false
+
+    GroupByPartition:
+      description: A groupping partition over some columns
+      type: object
+      required:
+        - groupby
+      properties:
+        groupby:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/Value"
+      additionalProperties: false
+
+    MeasurementParams:
+      description: The parameters of a measurement query step
+      type: object
+      properties:
+        column:
+          type: string
+        mech:
+          $ref: "#/components/schemas/NoiseMechanism"
+        budget:
+          $ref: "#/components/schemas/Budget"
+
+    Value:
+      description: A value
+      oneOf:
+        - type: string
+        - type: number
+        - type: boolean
+
+    Timestamp:
+      description: A timestamp
+      type: string
+      format: date-time
+
+    ErrorMessage:
+      description: An error message
+      type: object
+      required:
+        - title
+        - type
+        - status
+        - detail
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+
+  # Security schemes
+  securitySchemes:
+    BearerTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

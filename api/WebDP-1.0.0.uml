@@ -1,0 +1,337 @@
+@startuml
+hide empty members
+set namespaceSeparator none
+
+interface "/login" {
+}
+
+class "POST /login" {
+
+.. responses ..
+200: {field} <i>not specified</i> 
+401: {field} <i>not specified</i> 
+}
+
+
+
+"/login" ..> "POST /login"
+
+
+
+interface "/logout" {
+}
+
+class "POST /logout" {
+
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /logout" ..> Error
+
+"/logout" ..> "POST /logout"
+
+
+
+interface "/users" {
+}
+
+class "GET /users" {
+
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"GET /users" ..> Error
+
+class "POST /users" {
+
+.. responses ..
+201: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /users" ..> Error
+
+"/users" ..> "GET /users"
+"/users" ..> "POST /users"
+
+
+
+interface "/user/{userHandle}" {
+}
+
+class "GET /user/{userHandle}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"GET /user/{userHandle}" ..> UserHandle
+"GET /user/{userHandle}" ..> Error
+
+class "PATCH /user/{userHandle}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"PATCH /user/{userHandle}" ..> UserHandle
+"PATCH /user/{userHandle}" ..> Error
+
+class "DELETE /user/{userHandle}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"DELETE /user/{userHandle}" ..> Error
+"DELETE /user/{userHandle}" ..> UserHandle
+
+"/user/{userHandle}" ..> "DELETE /user/{userHandle}"
+"/user/{userHandle}" ..> "GET /user/{userHandle}"
+"/user/{userHandle}" ..> "PATCH /user/{userHandle}"
+
+
+
+interface "/datasets" {
+}
+
+class "GET /datasets" {
+
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"GET /datasets" ..> Error
+
+class "POST /datasets" {
+
+.. responses ..
+201: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /datasets" ..> Error
+
+"/datasets" ..> "GET /datasets"
+"/datasets" ..> "POST /datasets"
+
+
+
+interface "/dataset/{datasetId}" {
+}
+
+class "GET /dataset/{datasetId}" {
+.. path ..
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"GET /dataset/{datasetId}" ..> Error
+"GET /dataset/{datasetId}" ..> DatasetId
+
+class "PATCH /dataset/{datasetId}" {
+.. path ..
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"PATCH /dataset/{datasetId}" ..> Error
+"PATCH /dataset/{datasetId}" ..> DatasetId
+
+class "DELETE /dataset/{datasetId}" {
+.. path ..
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"DELETE /dataset/{datasetId}" ..> DatasetId
+"DELETE /dataset/{datasetId}" ..> Error
+
+"/dataset/{datasetId}" ..> "DELETE /dataset/{datasetId}"
+"/dataset/{datasetId}" ..> "GET /dataset/{datasetId}"
+"/dataset/{datasetId}" ..> "PATCH /dataset/{datasetId}"
+
+
+
+interface "/dataset/{datasetId}/upload" {
+}
+
+class "POST /dataset/{datasetId}/upload" {
+.. path ..
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /dataset/{datasetId}/upload" ..> Error
+"POST /dataset/{datasetId}/upload" ..> DatasetId
+
+"/dataset/{datasetId}/upload" ..> "POST /dataset/{datasetId}/upload"
+
+
+
+interface "/budget/user/{userHandle}" {
+}
+
+class "GET /budget/user/{userHandle}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"GET /budget/user/{userHandle}" ..> Error
+"GET /budget/user/{userHandle}" ..> UserHandle
+
+"/budget/user/{userHandle}" ..> "GET /budget/user/{userHandle}"
+
+
+
+interface "/budget/dataset/{datasetId}" {
+}
+
+class "GET /budget/dataset/{datasetId}" {
+.. path ..
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"GET /budget/dataset/{datasetId}" ..> DatasetId
+"GET /budget/dataset/{datasetId}" ..> Error
+
+"/budget/dataset/{datasetId}" ..> "GET /budget/dataset/{datasetId}"
+
+
+
+interface "/budget/allocation/{userHandle}/{datasetId}" {
+}
+
+class "GET /budget/allocation/{userHandle}/{datasetId}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"GET /budget/allocation/{userHandle}/{datasetId}" ..> DatasetId
+"GET /budget/allocation/{userHandle}/{datasetId}" ..> UserHandle
+"GET /budget/allocation/{userHandle}/{datasetId}" ..> Error
+
+class "POST /budget/allocation/{userHandle}/{datasetId}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /budget/allocation/{userHandle}/{datasetId}" ..> DatasetId
+"POST /budget/allocation/{userHandle}/{datasetId}" ..> UserHandle
+"POST /budget/allocation/{userHandle}/{datasetId}" ..> Error
+
+class "PATCH /budget/allocation/{userHandle}/{datasetId}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"PATCH /budget/allocation/{userHandle}/{datasetId}" ..> Error
+"PATCH /budget/allocation/{userHandle}/{datasetId}" ..> DatasetId
+"PATCH /budget/allocation/{userHandle}/{datasetId}" ..> UserHandle
+
+class "DELETE /budget/allocation/{userHandle}/{datasetId}" {
+.. path ..
+{field} UserHandle <b>userHandle</b>
+{field} DatasetId <b>datasetId</b>
+.. responses ..
+204: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"DELETE /budget/allocation/{userHandle}/{datasetId}" ..> UserHandle
+"DELETE /budget/allocation/{userHandle}/{datasetId}" ..> Error
+"DELETE /budget/allocation/{userHandle}/{datasetId}" ..> DatasetId
+
+"/budget/allocation/{userHandle}/{datasetId}" ..> "DELETE /budget/allocation/{userHandle}/{datasetId}"
+"/budget/allocation/{userHandle}/{datasetId}" ..> "GET /budget/allocation/{userHandle}/{datasetId}"
+"/budget/allocation/{userHandle}/{datasetId}" ..> "PATCH /budget/allocation/{userHandle}/{datasetId}"
+"/budget/allocation/{userHandle}/{datasetId}" ..> "POST /budget/allocation/{userHandle}/{datasetId}"
+
+
+
+interface "/query/evaluate" {
+}
+
+class "POST /query/evaluate" {
+
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /query/evaluate" ..> Error
+
+"/query/evaluate" ..> "POST /query/evaluate"
+
+
+
+interface "/query/accuracy" {
+}
+
+class "POST /query/accuracy" {
+
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /query/accuracy" ..> Error
+
+"/query/accuracy" ..> "POST /query/accuracy"
+
+
+
+interface "/query/custom" {
+}
+
+class "POST /query/custom" {
+
+.. responses ..
+200: {field} <i>not specified</i> 
+default: {field} Error 
+}
+
+"POST /query/custom" ..> Error
+
+"/query/custom" ..> "POST /query/custom"
+
+
+
+@enduml
