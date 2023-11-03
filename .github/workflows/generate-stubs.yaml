@@ -4,9 +4,6 @@ on:
   push:
     tags:
       - "*"
-  pull_request:          # To be removed after testing
-    branches: [ "main" ] #
-
 
 permissions:
   contents: read
@@ -42,4 +39,3 @@ jobs:
       with:
         artifacts: WebDP-stubs.zip
         bodyFile: CHANGELOG.md
-        tag: test # to be removed after testing
