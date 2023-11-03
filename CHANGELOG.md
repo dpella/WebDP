@@ -9,8 +9,8 @@
 * Scripts to autogenerate Python server and client stubs
 * CI workflow to release autogenreated stubs
 
-### Fixed
+<!-- ### Fixed -->
 
-### Changed
+<!-- ### Changed -->
 
-### Removed
+<!-- ### Removed -->
