@@ -19,6 +19,3 @@ $OPENAPI_GENERATOR generate \
   -o /local/$OUT_DIR \
   -g $TARGET \
   --additional-properties=packageName=$PKG_NAME
-
-# Fix permissions
-sudo chown vscode:vscode -R $OUT_DIR
