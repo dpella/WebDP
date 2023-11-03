@@ -14,7 +14,7 @@ through a WebDP server.
 
 * [API specification version 1.0.0](https://editor.swagger.io/?url=https://webdp.dev/api/WebDP-1.0.0.yml)
 * [A walkthrough over WebDP](/demo/webdp_demo.ipynb) (an interactive Jypyter
-  notebook with simple examples of use to get started)
+  notebook with simple examples of intended use to get started)
 
 # Design
 
@@ -74,7 +74,7 @@ ages (where ages are binned as 0-18, 18-30, 31-45, 45-65):
 ```json
 [
   { "bin":     { "age": [0, 18, 30, 45, 65] } },
-  { "groupby": { "age_binned": [18, 30, 45, 65] } },
+  { "groupby": { "age_bins": [18, 30, 45, 65] } },
   { "mean":    { "column": "salary" } },
 ]
 ```
@@ -84,10 +84,10 @@ Obtaining a result like it follows:
 ```json
 {
   "rows": [
-    { "age_binned": 18, "salary_mean": 1824.32 },
-    { "age_binned": 30, "salary_mean": 2354.23 },
-    { "age_binned": 45, "salary_mean": 2759.31 },
-    { "age_binned": 65, "salary_mean": 2929.58 },
+    { "age_bins": 18, "mean_salary": 1824.32 },
+    { "age_bins": 30, "mean_salary": 2354.23 },
+    { "age_bins": 45, "mean_salary": 2759.31 },
+    { "age_bins": 65, "mean_salary": 2929.58 },
   ]
 }
 
