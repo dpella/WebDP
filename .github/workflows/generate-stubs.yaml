@@ -38,5 +38,5 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: stub/*
-        body: CHANGELOG.md
+        bodyFile: CHANGELOG.md
         tag: test # to be removed after testing
