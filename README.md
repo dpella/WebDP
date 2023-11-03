@@ -73,9 +73,9 @@ ages (where ages are binned as 0-18, 18-30, 31-45, 45-65):
 
 ```json
 [
-  { “bin”:     { “age”: [0, 18, 30, 45, 65] } },
-  { “groupby”: { “age”: [18, 30, 45, 65] } },
-  { “mean”:    { “column”: “age” },
+  { "bin":     { "age": [0, 18, 30, 45, 65] } },
+  { "groupby": { "age_binned": [18, 30, 45, 65] } },
+  { "mean":    { "column": "age_binned" } },
 ]
 ```
 
@@ -83,11 +83,11 @@ Obtaining a result like it follows:
 
 ```json
 {
-  “rows”: [
-    { “age”: 18, “salary_mean”: 1824.32 },
-    { “age”: 30, “salary_mean”: 2354.23 },
-    { “age”: 45, “salary_mean”: 2759.31 },
-    { “age”: 65, “salary_mean”: 2929.58 },
+  "rows": [
+    { "age_binned": 18, "salary_mean": 1824.32 },
+    { "age_binned": 30, "salary_mean": 2354.23 },
+    { "age_binned": 45, "salary_mean": 2759.31 },
+    { "age_binned": 65, "salary_mean": 2929.58 },
   ]
 }
 
@@ -99,7 +99,7 @@ With the API design in place, developers can rely on open-source tools like
 OpenAPI Generator to automatically generate client and server code that
 implements the communication protocol defined in the WebDP API, making it easy
 for both DP users and implementors to join the project’s proposed ecosystem. In
-this fashion, DP users can easily start using any WebDP compliant server to
+this fashion, DP users can easily start using any WebDP-compliant server to
 execute differentially private queries using either an automatically generated
 client in their programming language of choice, or by encoding requests directly
 using the familiar JSON format.
@@ -109,11 +109,18 @@ automatically generating a server stub for the programming language of their
 choice and implementing the mocked-up endpoint controllers using their own DP
 framework primitives.
 
+As a starting point for these tasks, this project provides two scripts for the
+generation of WebDP's [client](/scripts/generate-client-stub-python.sh) and
+[server](/scripts/generate-client-server-python.sh) stubs as Python libraries.
+These serve as an entry point for DP implementors looking to develop the WebDP
+connector of their choice.
+
 # Contributing
 WebDP relies on the collaborative efforts of our community, and we
 enthusiastically invite you to join us in shaping its development! Should you
 wish to get involved, don't hesitate to reach out to us at
-[webdp@dpella.io](mailto:webdp@dpella.io) or in [our website](https://dpella.io).
+[webdp@dpella.io](mailto:webdp@dpella.io) or on [our
+website](https://dpella.io)](https://dpella.io).
 
 ## Bug Reports
 Found a bug or have a feature request? Please open an issue
