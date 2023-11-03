@@ -34,3 +34,4 @@ jobs:
       # if: startsWith(github.ref, 'refs/tags/') to be enabled after testing
       with:
         files: stub/*
+        tag_name: test # to be removed after testing
