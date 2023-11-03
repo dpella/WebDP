@@ -75,7 +75,7 @@ ages (where ages are binned as 0-18, 18-30, 31-45, 45-65):
 [
   { "bin":     { "age": [0, 18, 30, 45, 65] } },
   { "groupby": { "age_binned": [18, 30, 45, 65] } },
-  { "mean":    { "column": "age_binned" } },
+  { "mean":    { "column": "salary" } },
 ]
 ```
 
