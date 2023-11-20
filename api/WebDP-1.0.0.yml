@@ -47,7 +47,7 @@ paths:
                   $ref: "#/components/schemas/UserPassword"
       responses:
         200: # OK
-          description: Login succeded
+          description: Login succeeded
           content:
             application/json:
               schema:
@@ -69,7 +69,7 @@ paths:
       tags: [Login]
       responses:
         204: # No content
-          description: Logout succeded
+          description: Logout succeeded
         default:
           $ref: "#/components/responses/Error"
 
@@ -361,7 +361,7 @@ paths:
 
     get:
       operationId: getDatasetBudgetAllocation
-      summary: Get the dataset budget allocation accross users
+      summary: Get the dataset budget allocation across users
       tags: [Budget]
       responses:
         200: # OK
@@ -420,7 +420,7 @@ paths:
 
     patch:
       operationId: updateUserDatasetBudget
-      summary: Update the budget alocated to a user for a given dataset
+      summary: Update the budget allocated to a user for a given dataset
       tags: [Budget]
       requestBody:
         required: true
@@ -436,7 +436,7 @@ paths:
 
     delete:
       operationId: deleteUserDatasetBudget
-      summary: Dealocate the budget assigned to a user for a given dataset
+      summary: Deallocate the budget assigned to a user for a given dataset
       tags: [Budget]
       responses:
         204: # No content
@@ -1050,7 +1050,7 @@ components:
       additionalProperties: false
 
     GroupByPartition:
-      description: A groupping partition over some columns
+      description: A grouping partition over some columns
       type: object
       required:
         - groupby
