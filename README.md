@@ -13,7 +13,7 @@ through a WebDP server.
 ## Shortcuts
 
 * [API specification version 1.0.0](https://editor.swagger.io/?url=https://webdp.dev/api/WebDP-1.0.0.yml)
-* [A walkthrough over WebDP](/demo/webdp_demo.ipynb) (an interactive Jypyter
+* [A walkthrough over WebDP](/mockup/webdp_mockup.ipynb) (an interactive Jypyter
   notebook with simple examples of intended use to get started)
 
 # Design
@@ -64,18 +64,16 @@ our initial design encompasses the following query operation steps:
   + `sum`: a differentially private sum of a row in the dataset
   + `mean`: a differentially private mean of a row in the dataset
 
-As an example, if the system has a loaded dataset with columns `age` and
-`salary` (both numeric), a user would be able to write the following query to
-create a differentially private analysis of the salary of a population across
-ages (where ages are binned as 0-18, 18-30, 31-45, 45-65):
-
-
+As an example, if the system has a loaded dataset with columns `age`, `salary`
+(both numeric), and `job` (an enumeration), a user would be able to write the
+following query to create a differentially private analysis of the mean salary
+young professionals across jobs:
 
 ```json
 [
-  { "bin":     { "age": [0, 18, 30, 45, 65] } },
-  { "groupby": { "age_bins": [18, 30, 45, 65] } },
-  { "mean":    { "column": "salary" } },
+  { "filter": [ "age > 18", "age < 35" ] },
+  { "groupby": { "job": [ "Accountant", "Dentist", "High School Teacher", "Software Engineer" ] } },
+  { "mean": { "column": "salary" } }
 ]
 ```
 
@@ -84,13 +82,12 @@ Obtaining a result like it follows:
 ```json
 {
   "rows": [
-    { "age_bins": 18, "mean_salary": 1824.32 },
-    { "age_bins": 30, "mean_salary": 2354.23 },
-    { "age_bins": 45, "mean_salary": 2759.31 },
-    { "age_bins": 65, "mean_salary": 2929.58 },
+    { "job": "Accountant"         , "mean_salary": 7214.23  },
+    { "job": "Dentist"            , "mean_salary": 9513.44  },
+    { "job": "High School Teacher", "mean_salary": 4432.09  },
+    { "job": "Software Engineer"  , "mean_salary": 10584.12 },
   ]
 }
-
 ```
 
 # Proof of Concept
