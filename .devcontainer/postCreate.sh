@@ -3,5 +3,5 @@
 echo "*** Pulling openapi-generator Docker image"
 docker pull openapitools/openapi-generator-cli:latest-release
 
-echo "*** Installing jupyterlab and matplotlib for demoing"
-pip3 install jupyterlab matplotlib
+echo "*** Installing jupyterlab demoing"
+pip3 install jupyterlab
