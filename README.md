@@ -128,5 +128,5 @@ This project was founded by the [TERMINET
 consortium](https://terminet-h2020.eu/).
 
 # License
-Distributed under the Apache License Version 2.0. See LICENSE.txt for more
+Distributed under the Apache License Version 2.0. See [LICENSE](LICENSE) for more
 information.
